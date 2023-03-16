@@ -1,0 +1,20 @@
+     1                                  
+     2                                  section .text
+     3                                  global _start
+     4                                  
+     5 00000000 B801000000              _start:         mov rax, 0x01
+     6 00000005 BF01000000                              mov rdi, 1
+     7 0000000A 48BE-                                   mov rsi, Msg
+     7 0000000C [0000000000000000] 
+     8 00000014 BA0F000000                              mov rdx, MsgLen 
+     9 00000019 0F05                                    syscall
+    10                                  
+    11 0000001B B83C000000                              mov rax, 0x3c
+    12 00000020 4831FF                                  xor rdi, rdi
+    13 00000023 0F05                                    syscall
+    14                                  
+    15                                  section .data
+    16                                  
+    17 00000000 48656C6C6F20576F72-     Msg     db      "Hello World!!!", 0x0A
+    17 00000009 6C642121210A       
+    18                                  MsgLen  equ     $ - Msg 
