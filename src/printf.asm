@@ -13,7 +13,7 @@ printf:         ; proc
                 ; endp
 
 ;------------------------------------------------
-;   putchar( *ch_ptr )
+;   putchar( char* ch_ptr )
 ;------------------------------------------------
 ; entry:    rsi = ch_ptr
 ; exit:     none
@@ -45,6 +45,36 @@ putchar:        ; proc
                 ; endp
 
 ;------------------------------------------------
+;   puts( char* str_ptr )
+;------------------------------------------------
+; entry:    rsi = str_ptr
+; exit:     none
+; expects:  end sym = '\0'
+; destroys: none
+;------------------------------------------------
+
+global puts
+
+puts:           ; proc
+
+                push rsi
+
+                .Next:          cmp byte [rsi], 0   ; if( curr_sym == '\0' )
+                                je .End
+
+                                call putchar
+                                inc  rsi            ; str_ptr++
+
+                                jmp .Next
+                .End:
+
+                pop rsi
+
+                ret
+                ; endp
+
+;------------------------------------------------
+
 
 ; %include "num_cnvrt.asm"
                 
