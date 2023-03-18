@@ -1,15 +1,16 @@
 
+section .text
+
+extern putchar
+
 ;------------------------------------------------
-;	print ax in bin
+;	print rax in bin
 ;------------------------------------------------
-; entry:	ax = num
+; entry:	rax = num
 ; exit:		none
 ; destroys:	none 
 ;------------------------------------------------
 
-section .text
-
-extern putchar
 global print_bin
 
 print_bin:	    ; proc				
@@ -48,9 +49,9 @@ print_bin:	    ; proc
 				; endp
 
 ;------------------------------------------------
-;	print ax in hex
+;	print rax in hex
 ;------------------------------------------------
-; entry:	ax = num
+; entry:	rax = num
 ; exit:		none
 ; destroys:	none  
 ;------------------------------------------------
@@ -123,5 +124,65 @@ print_hex		; proc
 
 				ret
 				endp
+
+;------------------------------------------------
+;	print rax in a number system ( <= 10 )
+;------------------------------------------------
+; entry:	rax = num
+;			bx = system degree
+; exit:		none
+; destroys:	none
+;------------------------------------------------
+
+global print_num	
+
+print_num		; proc
+				
+				push rax 
+				push rbx
+				push rcx 
+				push rdx
+
+				xor rdx, rdx			; i = 0
+				mov rcx, rbx			; CX = degree
+
+				.Next:			push rdx				
+
+								xor rdx, rdx		; DX = 0
+
+								div  cx				; AX /= degree
+
+								push rax				
+
+								xor rax, rax
+								add dl, 48d		; print( DL + '0' )
+								mov al, dl
+								mov rbx, rax			
+
+								pop rax	
+								pop rdx
+
+								push rbx
+
+								inc dx
+
+								cmp ax, 0			; if( AX > 0 )
+								jne .Next
+
+				.Print:			mov  rsi, rsp 		; reverse print
+								call putchar 	
+								pop  rax						
+
+								dec dx
+								cmp dx, 0
+								jne .Print 			; if( i != 0 )
+				
+				pop rdx 
+				pop rcx 
+				pop rbx
+				pop rax		
+
+				ret 
+				; endp
 
 ;------------------------------------------------
