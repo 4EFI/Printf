@@ -2,15 +2,12 @@
 section .text
 global _start 
 extern putchar
-extern printbin
+extern print_bin, print_hex
 
 ;------------------------------------------------
 
-_start:         mov  rsi, Msg
-                call putchar
-
-                mov rax, 8d
-                call printbin
+_start:         mov rax, 11d
+                call print_hex
 
                 mov rax, 0x3c       ; exit( 0 )
                 xor rdi, rdi
