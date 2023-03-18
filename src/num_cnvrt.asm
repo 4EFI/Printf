@@ -58,7 +58,7 @@ print_bin:	    ; proc
 
 global print_hex
 
-print_hex		; proc
+print_hex:		; proc
 							
 				push rax 
 				push rcx
@@ -123,7 +123,7 @@ print_hex		; proc
 				pop rax
 
 				ret
-				endp
+				; endp
 
 ;------------------------------------------------
 ;	print rax in a number system ( <= 10 )
@@ -136,7 +136,7 @@ print_hex		; proc
 
 global print_num	
 
-print_num		; proc
+print_num:		; proc
 				
 				push rax 
 				push rbx

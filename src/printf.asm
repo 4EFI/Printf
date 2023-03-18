@@ -1,13 +1,63 @@
 
-section .text
-
 ;------------------------------------------------
 ;   printf( str, ... )
 ;------------------------------------------------
 
+section .data
+
+JumpTable:  times '%'       dq None         ; from '\0' to '%' 
+
+                            dq Percent      ; '%%'
+            ;times 
+
+section .text
+
+None:       ; jmp
+
+Percent:        call putchar
+                inc  rsi
+                ret
+
+global printf
+
 printf:         ; proc        
 
-                
+                push rbp
+                mov  rbp, rsp
+                add  rbp, 16d               ; + ret_addr + push_rbp 
+
+                push rsi
+                mov  rsi, [rbp]             ; rsi = str addr
+
+                push rbx
+
+                .Next:          cmp byte [rsi], 0       ; if( curr_sym == '\0' )
+                                je .End
+
+                                cmp byte [rsi], '%'     ; if( curr_sym == '%' )
+                                jne .NotPercent
+
+                                inc  rsi
+                                xor  rbx, rbx
+                                mov  bl, [rsi]
+                                push .Next
+                                jmp [JumpTable + 8*rbx]
+
+                                ; None:
+
+                                ; Percent:
+
+                                .NotPercent:
+
+                                call putchar
+                                inc  rsi
+
+                                jmp .Next       
+                .End:
+
+                pop rbx
+                pop rsi
+                pop rbp
 
                 ret
                 ; endp
