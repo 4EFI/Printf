@@ -1,51 +1,50 @@
 
 ;------------------------------------------------
-;	PRINT AX IN BIN
+;	print ax in bin
 ;------------------------------------------------
-; ENTRY:	AX = NUM
-;			BH = X LEFT CORNER COORDS [0; 79]
-;			BL = Y LEFT CORNER COORDS [0; 24]
-; EXIT:		NONE
-; EXPECTS:	ES = 0b800h (VIDEO SEGMENT)
-; DESTROYS:	NONE 
+; entry:	ax = num
+; exit:		none
+; destroys:	none 
 ;------------------------------------------------
 
-bin_len	= 16d							; len of bin str	
+section .text
 
-PrintBin:	    ; proc				
-				
-				push di					; push (0)
+extern putchar
+global printbin
 
-				push ax dx				; push (2) (3)		
+printbin:	    ; proc				
 
-				xor  dx, dx				; i = 0
+				push rax 
+				push rdx	
 
-				.Next:			shr ax, 1				; AX /= 2
+				xor  dx, dx		; i = 0
 
-								push ax					; push (4)
+				.Next:			shr ax, 1		; AX /= 2			
 
 								jc .One
 
-								.Zero:			mov al, '0'			; '0'
+								.Zero:			push '0'		; '0'
 												jmp .End
 
-								.One:			mov al, '1'			; '1'
+								.One:			push '1'		; '1'
 
-				.End:			mov ah, 70h				; black on white
+				.End:			inc dx				; i++
 
-								sub di, 2				; print( ax ) // with 1 sym left( 2 bytes )
-								stosw 					
-								add di, 2				
+								cmp ax, 0			; if( ax > 0 )
+								jg .Next
 
-								pop ax					; pop (4)
+				.Print:			mov  rsi, rsp 		; reverse print
+								call putchar 	
+								pop  rax						
 
-								inc dx
+								dec dx
+								cmp dx, 0
+								jne .Print 			; if( i != 0 )
 
-								cmp dx, bin_len			; if( dx == bin_len )
-								jne __Next
-
-				pop dx ax			; pop  (3) (2)
-				pop di				; pop  (0)
+				pop rdx
+				pop rax			
 
 				ret
 				; endp
+
+;------------------------------------------------

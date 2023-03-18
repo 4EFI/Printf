@@ -1,4 +1,6 @@
 
+section .text
+
 ;------------------------------------------------
 ;   printf( str, ... )
 ;------------------------------------------------
@@ -22,14 +24,22 @@ global putchar
 
 putchar:        ; proc
 
-                ; push rcx r11
+                push rax
+                push rdi
+                push rdx
+                push rcx
+                push r11
 
                 mov rax, 1      ; write( edi = stdout, rsi = ch_ptr, rdx = 1 ( len ) )
                 mov rdi, 1      
                 mov rdx, 1      
                 syscall         
 
-                ; pop r11 rcx
+                pop r11
+                pop rcx
+                pop rdx
+                pop rdi
+                pop rax
 
                 ret
                 ; endp
