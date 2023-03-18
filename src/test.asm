@@ -1,6 +1,7 @@
 
 section .text
-global _start
+global _start 
+extern putchar
 
 ;------------------------------------------------
 
@@ -9,7 +10,7 @@ _start:         mov  rsi, Msg
 
                 mov rax, 0x3c       ; exit( 0 )
                 xor rdi, rdi
-                syscall
+                syscall 
 
 
 ;------------------------------------------------

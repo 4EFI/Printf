@@ -12,7 +12,6 @@ link : $(OBJ)
 	ld -s -o $(OUTPUT_FILE_NAME) $^
 
 src/build/%.o : src/%.asm	
-	echo  $(@D)
 	mkdir -p $(@D)
 	nasm -f elf64 -o $@	$^
 

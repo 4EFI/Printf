@@ -18,6 +18,8 @@ printf:         ; proc
 ; destroys: none
 ;------------------------------------------------
 
+global putchar
+
 putchar:        ; proc
 
                 ; push rcx r11
