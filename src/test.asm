@@ -8,10 +8,9 @@ extern print_bin, print_hex, print_num
 
 ;------------------------------------------------
 
-_start:         ; mov rax, 110d
-                ; mov rbx, 2d
-                ; call print_num
-
+_start:         push 10 
+                push Str
+                push 20
                 push 16
                 push 10
                 push 'v'
@@ -26,5 +25,6 @@ _start:         ; mov rax, 110d
 
 section .data
 
-Msg:    db      "%c %d %b str", 10d, 0
+Msg:    db      "%c %d %b %o %s %x str", 10d, 0
+Str:    db      "Hihiha", 0
 

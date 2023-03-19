@@ -13,6 +13,15 @@ JumpTable:  times '%'               dq None         ; [ '\0'; '%' )
                                     dq Bin          ; '%b'
                                     dq Char         ; '%c'
                                     dq Decimal      ; '%d'
+            times ( 'o'-'d' - 1 )   dq None         ; ( 'd'; 'o' )                                     
+                                    dq Oct          ; '%o'
+            times ( 's'-'o' - 1 )   dq None         ; ( 'o'; 's' )
+                                    dq String       ; '%s'   
+            times ( 'x'-'s' - 1 )   dq None         ; ( 's'; 'x' )
+                                    dq Hex          ; '%x'
+            times ( 255 - 'x' )     dq None
+
+
 
 section .text
 
@@ -25,7 +34,7 @@ section .text
                 inc  rcx            ; args_counter++
 %endmacro
 
-None:       ; jmp
+None:           ret
 
 Percent:        call putchar
                 inc  rsi
@@ -51,6 +60,31 @@ Decimal:        push rsi
                 mov  rax, [rsi]
                 mov  rbx, 10d
                 call print_num
+                pop  rsi
+                inc  rsi
+                ret
+
+Oct:            push rsi
+                GetArgAddr 
+                mov  rax, [rsi]
+                mov  rbx, 8d
+                call print_num
+                pop  rsi
+                inc  rsi
+                ret
+
+String:         push rsi
+                GetArgAddr 
+                mov  rsi, [rsi] 
+                call puts
+                pop  rsi
+                inc  rsi
+                ret
+
+Hex:            push rsi
+                GetArgAddr 
+                mov  rax, [rsi]
+                call print_hex
                 pop  rsi
                 inc  rsi
                 ret
