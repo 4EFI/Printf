@@ -1,22 +1,61 @@
 
+extern print_bin, print_hex, print_num
+
 ;------------------------------------------------
 ;   printf( str, ... )
 ;------------------------------------------------
 
 section .data
 
-JumpTable:  times '%'       dq None         ; from '\0' to '%' 
-
-                            dq Percent      ; '%%'
-            ;times 
+JumpTable:  times '%'               dq None         ; [ '\0'; '%' ) 
+                                    dq Percent      ; '%%'
+            times ( 'b'-'%' - 1 )   dq None         ; ( '%'; 'b' ) 
+                                    dq Bin          ; '%b'
+                                    dq Char         ; '%c'
+                                    dq Decimal      ; '%d'
 
 section .text
+
+%macro	        GetArgAddr 0
+                mov  rsi, rbp       ; rsi = rbp + 8 + 8*args_counter
+                add  rsi, 8
+                shl  rcx, 3
+                add  rsi, rcx
+                shr  rcx, 3
+                inc  rcx            ; args_counter++
+%endmacro
 
 None:       ; jmp
 
 Percent:        call putchar
                 inc  rsi
                 ret
+
+Char:           push rsi
+                GetArgAddr
+                call putchar
+                pop  rsi
+                inc  rsi
+                ret
+
+Bin:            push rsi
+                GetArgAddr 
+                mov  rax, [rsi]
+                call print_bin
+                pop  rsi
+                inc  rsi
+                ret
+
+Decimal:        push rsi
+                GetArgAddr 
+                mov  rax, [rsi]
+                mov  rbx, 10d
+                call print_num
+                pop  rsi
+                inc  rsi
+                ret
+
+;------------------------------------------------
 
 global printf
 
@@ -30,6 +69,9 @@ printf:         ; proc
                 mov  rsi, [rbp]             ; rsi = str addr
 
                 push rbx
+                push rcx                    
+
+                xor rcx, rcx                ; args_counter = 0
 
                 .Next:          cmp byte [rsi], 0       ; if( curr_sym == '\0' )
                                 je .End
@@ -41,11 +83,7 @@ printf:         ; proc
                                 xor  rbx, rbx
                                 mov  bl, [rsi]
                                 push .Next
-                                jmp [JumpTable + 8*rbx]
-
-                                ; None:
-
-                                ; Percent:
+                                jmp [JumpTable + 8*rbx] ; go to JumpTable
 
                                 .NotPercent:
 
@@ -55,6 +93,7 @@ printf:         ; proc
                                 jmp .Next       
                 .End:
 
+                pop rcx
                 pop rbx
                 pop rsi
                 pop rbp
@@ -124,7 +163,4 @@ puts:           ; proc
                 ; endp
 
 ;------------------------------------------------
-
-
-; %include "num_cnvrt.asm"
                 

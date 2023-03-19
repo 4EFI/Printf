@@ -12,6 +12,9 @@ _start:         ; mov rax, 110d
                 ; mov rbx, 2d
                 ; call print_num
 
+                push 16
+                push 10
+                push 'v'
                 push Msg
                 call printf
 
@@ -23,5 +26,5 @@ _start:         ; mov rax, 110d
 
 section .data
 
-Msg:    db      "%% str", 10d, 0
+Msg:    db      "%c %d %b str", 10d, 0
 
