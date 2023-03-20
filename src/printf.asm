@@ -1,4 +1,6 @@
 
+section .text
+
 extern print_bin, print_hex, print_num
 
 ;------------------------------------------------
@@ -20,8 +22,6 @@ JumpTable:  times '%'               dq None         ; [ '\0'; '%' )
             times ( 'x'-'s' - 1 )   dq None         ; ( 's'; 'x' )
                                     dq Hex          ; '%x'
             times ( 255 - 'x' )     dq None
-
-
 
 section .text
 
@@ -91,9 +91,9 @@ Hex:            push rsi
 
 ;------------------------------------------------
 
-global printf
+global _printf
 
-printf:         ; proc        
+_printf:      ; proc        
 
                 push rbp
                 mov  rbp, rsp
@@ -131,6 +131,42 @@ printf:         ; proc
                 pop rbx
                 pop rsi
                 pop rbp
+
+                ret
+                ; endp
+
+global c_printf
+
+c_printf        ; proc
+                
+                ;                 sp 
+                ; Stack now: | ret addr | other pushs |
+                
+                mov [rsp - 6*8], rbx        ; save rbx ( keep mem for 6 pushs )
+                mov  rbx, [rsp]             ; rbx = ret addr 
+                add  rsp, 8
+
+                ;                                           sp
+                ; Stack now: | rbx | ... for 6 pushs | other pushs |
+                
+                push r9
+                push r8
+                push rcx
+                push rdx
+                push rsi
+                push rdi
+
+                ;                       sp
+                ; Stack now: | rbx | 6 pushs | other pushs |
+                
+                call _printf
+
+                push rbx                    ; push ret addr
+                mov  rbx, [rsp-6*8]         ; load rbx
+                add  rsp, 6*8
+
+                ;                 sp
+                ; Stack now: | ret addr | other pushs |
 
                 ret
                 ; endp

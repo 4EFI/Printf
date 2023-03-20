@@ -1,0 +1,1 @@
+gcc -no-pie -o main src/main.cpp src/build/printf.o src/build/num_cnvrt.o

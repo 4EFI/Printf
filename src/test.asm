@@ -3,7 +3,7 @@ section .text
 
 global _start 
 
-extern printf, putchar, puts
+extern _printf, putchar, puts
 extern print_bin, print_hex, print_num
 
 ;------------------------------------------------
@@ -15,7 +15,7 @@ _start:         push 10
                 push 10
                 push 'v'
                 push Msg
-                call printf
+                call _printf
 
                 mov rax, 0x3c       ; exit( 0 )
                 xor rdi, rdi
