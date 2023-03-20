@@ -34,7 +34,13 @@ section .text
                 inc  rcx            ; args_counter++
 %endmacro
 
-None:           ret
+None:           push rsi
+                push '%'
+                mov  rsi, rsp 
+                call putchar
+                pop  rsi
+                pop  rsi
+                ret
 
 Percent:        call putchar
                 inc  rsi

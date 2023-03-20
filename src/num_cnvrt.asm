@@ -71,26 +71,18 @@ print_hex:		; proc
 								push rdx
 								xor  rdx, rdx		; DX = 0 ( digit in hex )
 								
-								.Shift:			shr ax, 1		; AX /= 2
-		
-												jnc .End
+								mov rcx, rax
+								and rax, 15d
+								mov rdx, rax
+								mov rax, rcx
+								shr rax, 4
 
-												.One:			push rax		; push (6)
-																mov  ax, 1 		; AX = 0001b
-																shl  ax, cl		; DX += 2^CX
-																add  dx, ax 
-																pop	 rax		; pop  (6)
+								mov rcx, rax		; CX = AX
 								
-								.End:			inc cx			; shifts counter ++
-												cmp cx, 4d		; if( numShifts == 4 )
-												jne .Shift
-
-								mov cx, ax			; CX = AX
-								
-								cmp dx, 10d			; if( DX >= 10 )
+								cmp rdx, 10d		; if( DX >= 10 )
 								jge .Sym
 
-								.Digit:  		add  dx, 48d		; print( DX + '0' )
+								.Digit:  		add  dx, '0'		; print( DX + '0' )
 												xor  rax, rax
 												mov  al, dl	
 												jmp .Skip

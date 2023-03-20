@@ -7,7 +7,15 @@ int main()
 
     c_printf( "Sanya %d %d %d %d %d %d %d\n", 1, 1, 1, 1, 1, 1, 1 );
 
-    c_printf( "%d %b\n", -12 );
+    c_printf( "%d %b\n"
+              "-What do you love now?%v\n"
+              "%d %s %x %d%%%c%b\n", -1234, 11, 
+                                     -1, 
+                                     "love",
+                                     3802,
+                                     100,
+                                     33,
+                                     127 );
 
     return 0;
 }
