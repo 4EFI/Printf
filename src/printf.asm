@@ -7,7 +7,7 @@ extern print_bin, print_hex, print_num
 ;   printf( str, ... )
 ;------------------------------------------------
 
-section .data
+section .rodata
 
 JumpTable:  times '%'               dq None         ; [ '\0'; '%' ) 
                                     dq Percent      ; '%%'
@@ -161,9 +161,9 @@ c_printf        ; proc
                 
                 call _printf
 
+                add  rsp, 6*8
                 push rbx                    ; push ret addr
                 mov  rbx, [rsp-6*8]         ; load rbx
-                add  rsp, 6*8
 
                 ;                 sp
                 ; Stack now: | ret addr | other pushs |
