@@ -142,6 +142,23 @@ print_num:		; proc
 				push rbx
 				push rcx 
 				push rdx
+				push r8
+
+				push rax
+				mov  rcx, 1
+				shl  rcx, 16
+				and  rax, rcx
+				mov  r8, rax
+				pop  rax
+				cmp  r8, 0
+				je	.NoMinus
+
+				mov rcx, 1
+				shl rcx, 16
+				sub rax, rcx
+				neg rax
+
+				.NoMinus:
 
 				xor rdx, rdx			; i = 0
 				mov rcx, rbx			; CX = degree
@@ -169,6 +186,14 @@ print_num:		; proc
 								cmp ax, 0			; if( AX > 0 )
 								jne .Next
 
+				cmp r8, 0
+				je .Print
+
+				push '-'
+				mov  rsi, rsp 			; print '-'
+				call putchar 	
+				pop rax
+
 				.Print:			mov  rsi, rsp 		; reverse print
 								call putchar 	
 								pop  rax						
@@ -177,6 +202,7 @@ print_num:		; proc
 								cmp dx, 0
 								jne .Print 			; if( i != 0 )
 				
+				pop r8
 				pop rdx 
 				pop rcx 
 				pop rbx

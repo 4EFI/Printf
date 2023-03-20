@@ -7,5 +7,7 @@ int main()
 
     c_printf( "Sanya %d %d %d %d %d %d %d\n", 1, 1, 1, 1, 1, 1, 1 );
 
+    c_printf( "%d %b\n", -12 );
+
     return 0;
 }
