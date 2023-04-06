@@ -147,13 +147,13 @@ global c_printf
 
 c_printf        ; proc
                 
-                push bp 
-                mov  bp, sp
-                add  sp, 16
+                ; push bp 
+                ; mov  bp, sp
+                ; add  sp, 16
 
                 call printf
-                mov  sp, bp
-                pop  bp
+                ; mov  sp, bp
+                ; pop  bp
 
                 ;                 sp 
                 ; Stack now: | ret addr | other pushs |

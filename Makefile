@@ -10,6 +10,7 @@ OBJ     = $(subst src,src/build, $(OBJ_TMP))
                                              
 link : $(OBJ) 
 	gcc -no-pie -o $(OUTPUT_FILE_NAME) $^
+	gcc -no-pie -o main src/main.cpp src/build/printf.o src/build/num_cnvrt.o
 
 src/build/%.o : src/%.asm	
 	mkdir -p $(@D)
