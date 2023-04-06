@@ -9,7 +9,7 @@ OBJ     = $(subst src,src/build, $(OBJ_TMP))
 #compiling
                                              
 link : $(OBJ) 
-	ld -s -o $(OUTPUT_FILE_NAME) $^
+	gcc -no-pie -o $(OUTPUT_FILE_NAME) $^
 
 src/build/%.o : src/%.asm	
 	mkdir -p $(@D)

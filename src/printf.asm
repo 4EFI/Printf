@@ -1,6 +1,8 @@
 
 section .text
 
+extern printf
+
 extern print_bin, print_hex, print_num
 
 ;------------------------------------------------
@@ -145,6 +147,14 @@ global c_printf
 
 c_printf        ; proc
                 
+                push bp 
+                mov  bp, sp
+                add  sp, 16
+
+                call printf
+                mov  sp, bp
+                pop  bp
+
                 ;                 sp 
                 ; Stack now: | ret addr | other pushs |
                 

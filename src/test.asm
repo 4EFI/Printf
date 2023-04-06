@@ -1,14 +1,14 @@
 
 section .text
 
-global _start 
+global main
 
 extern _printf, putchar, puts
 extern print_bin, print_hex, print_num
 
 ;------------------------------------------------
 
-_start:         push 10 
+main:           push 10 
                 push Str
                 push 20
                 push 16
