@@ -147,14 +147,6 @@ global c_printf
 
 c_printf        ; proc
                 
-                ; push bp 
-                ; mov  bp, sp
-                ; add  sp, 16
-
-                call printf
-                ; mov  sp, bp
-                ; pop  bp
-
                 ;                 sp 
                 ; Stack now: | ret addr | other pushs |
                 
@@ -178,6 +170,9 @@ c_printf        ; proc
                 call _printf
 
                 add  rsp, 6*8
+
+                call printf
+
                 push rbx                    ; push ret addr
                 mov  rbx, [rsp-6*8]         ; load rbx
 
